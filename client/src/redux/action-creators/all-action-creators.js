@@ -1,0 +1,1 @@
+export * as actionCreators from './chats-action-creators'
