@@ -3,6 +3,7 @@ import React from 'react';
 import {NavLink} from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Chat } from './Chat';
+import { ChatContainer } from './ChatContainer';
 import {CreateChatWindow} from './createChat/CreateChat'
 
 const ChatsPageContainer = styled.div`
@@ -84,18 +85,16 @@ export const ChatsPage = (props) => {
                                     <NavLink to={{
                                         pathname: '/chats/id',
                                         linkProps: {
-                                            handlerMsgInput: props.handlerMsgInput,
-                                            sendMsg: props.sendMsg,
                                             userId: props.userId,
                                             chatId: chat._id,
-                                            messages: props.messages
+                                            messages: chat.messages
                                         }
-                                    }}>
-                                        <ChatElement>
-                                            <UserName>{!chat.messages[chat.messages.length-1].userName ? chat.name
-                                            : chat.messages[chat.messages.length-1].userName}</UserName>
-                                            <LastMsg>{chat.messages[chat.messages.length-1].message}</LastMsg>
-                                        </ChatElement>
+                                    }}> 
+                                            <ChatElement>
+                                                <UserName>{!chat.messages[chat.messages.length-1].userName ? chat.name
+                                                : chat.messages[chat.messages.length-1].userName}</UserName>
+                                                <LastMsg>{chat.messages[chat.messages.length-1].message}</LastMsg>
+                                            </ChatElement>
                                     </NavLink>
                                 </ListElement>
                             )

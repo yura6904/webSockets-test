@@ -40,17 +40,14 @@ const SendButton = styled.input`
         cursor: pointer
     }
 `;
-export const Chat = () => {
+export const Chat = (props) => {
     debugger;
-    const location = useLocation();
-    console.log(location)
     return (
         <Container className='chat-container container'>
             <MessageField>
                 <ul>
-                    {location.linkProps.messages.length !== 0 ? (
-                        location.linkProps.messages.forEach(m => {
-                            debugger; 
+                    {props.messages.length !== 0 ? (
+                        props.messages.map(m => {
                             return(
                             
                             <li>
@@ -66,8 +63,8 @@ export const Chat = () => {
                 </ul>
             </MessageField>
             <InputsDiv>
-                <MessageInput type='text' onChange = {location.linkProps.handlerMsgInput}></MessageInput>   
-                <SendButton type='button' value='Отправить' onClick={() => {debugger; location.linkProps.sendMsg(location.linkProps.userId, location.linkProps.chatId)}}/>
+                <MessageInput type='text' onChange = {props.handlerMsgInput}></MessageInput>   
+                <SendButton type='button' value='Отправить' onClick={() => {debugger; props.sendMsg(props.userId, props.chatId)}}/>
             </InputsDiv>
         </Container>
         

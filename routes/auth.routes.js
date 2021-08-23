@@ -171,17 +171,32 @@ router.post(
         //нашли чат
         const chat = await Chats.findById(chatId);
         const newMsg = {
-            message: message,
-            userId: userId,
+            message,
+            userId,
             userName: user.name,
         };
-        const updatedMsgs = chat.messages;
+        console.log(message)
+
+        let updatedMsgs = chat.messages;
         updatedMsgs.push(newMsg);
         //сохраняем новое сообщение в чате
         await Chats.findByIdAndUpdate(chatId, {messages: updatedMsgs});
         const result = await Chats.findById(chatId);
-        console.log(result);
-        res.json(result);
+        updatedMsgs = [];
+        res.json(result.messages);
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+});
+router.post(
+    '/getMessagesList', 
+    async (req, res) => {
+    try {
+        const {chatId} = req.body;
+        
+        const chat = await Chats.findById(chatId);
+
+        res.json(msgList);
     } catch (e) {
         res.status(500).json({message: e.message});
     }

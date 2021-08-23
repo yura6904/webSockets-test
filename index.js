@@ -23,6 +23,7 @@ async function start() {
             console.log('socket started', socket.id);
             
             socket.on('send message', (data) => {
+                console.log('emit send message')
                 io.emit('save chat message', {
                     message: data.message,
                     userId: data.userId,

@@ -10,16 +10,13 @@ import { socket } from '../../socket-connection';
 export const ChatsPageContainer = (props) => {
     const auth = useContext(AuthContext);
     const {request} = useHttp();
-
     const chatsState = useSelector((state) => state);
-
     const dispatch = useDispatch();
     const {setChatsAC, setUsersAC} = bindActionCreators(actionCreators, dispatch);
 
     const [createChat, setCreateChat] = useState(false);
     const [usersInfo, setUsersInfo] = useState([]);
     const [nameOfChat, setNameOfChat] = useState('');
-    const [message, setMessage] = useState('');
     const [messagesList, setMessagesList] = useState([]);
 
     useEffect(() => {
@@ -33,6 +30,7 @@ export const ChatsPageContainer = (props) => {
             await setChatsAC(
                 await request('/api/auth/getChatsData', 'POST', {userId: auth.userId})
             );
+            await setMessagesList(chatsState.chatsData.chats.messages);
         })();
     }, []);
 
@@ -47,7 +45,7 @@ export const ChatsPageContainer = (props) => {
             resultArr.push(arr[i]);
             else continue;
         }
-        setUsersInfo(resultArr)
+        setUsersInfo(resultArr);
     }
 
     const handlerChatName = event => {
@@ -55,13 +53,7 @@ export const ChatsPageContainer = (props) => {
         console.log(nameOfChat);
 
     }
-    //не работает
-    const handlerMsgInput = event => {
-        debugger;
-        setMessage(event.target.value);
-        console.log(message);
-    }
-        
+
     const createNewChat = (arrOfUsersId) => {
         (async () => {
             await setChatsAC(
@@ -69,25 +61,9 @@ export const ChatsPageContainer = (props) => {
             );
         })();      
     }
-
-    const sendMsg = (userId, chatId) => {
-        socket.emit('send message', {
-            message: message,
-            user: userId,
-            chatId: chatId
-        });
-        socket.on('save chat message', async (data) => {
-            debugger;
-            const chatMessages = await request('/api/auth/saveMessage', 'POST', {chatId: data.chatId, newMsg: message, userId: auth.userId})
-            //не работает
-            setMessagesList(chatMessages.messages);
-            console.log(messagesList);
-        });
-    }
     return(
         <ChatsPage userId = {props.userId} chats = {!chatsState.chatsData.chats ? [] : chatsState.chatsData.chats}
             createChatWindow = {createChat} openCreateChatWindow = {openCreateChat} users = {!usersInfo ? [] : usersInfo}
-            createNewChat = {createNewChat} handlerChatName = {handlerChatName} sendMsg = {sendMsg}
-            handlerMsgInput = {handlerMsgInput} messages = {messagesList}/>
+            createNewChat = {createNewChat} handlerChatName = {handlerChatName} messages = {!messagesList ? [] : messagesList}/>
     )
 }

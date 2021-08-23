@@ -42,15 +42,12 @@ export const CreateChatWindow = (props) => {
             <ChooseUsers>
                 <UsersList>
                     {props.users.map((u, index) => {
-                        debugger;
                         return (
                         
                         <ListElement key={index}>
                             <CheckBox type='button' onClick={() => {
-                                debugger
                                     checkedUsers.push(u._id);
                                     symbol[index] = !symbol[index];
-                                    debugger;
                                 }} 
                                 value={symbol[index] === false ? '+' : '-'}/>
                             <span style={{marginLeft:'10%'}}>{u.email}</span>
